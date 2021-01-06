@@ -1,0 +1,29 @@
+const BaseCommand = require('../../utils/structures/BaseCommand');
+  const {
+    MessageEmbed
+  } = require('discord.js');
+  const axios = require('axios');
+
+module.exports = class HugCommand extends BaseCommand {
+  constructor() {
+    super('hug', 'Extra', []);
+  }
+
+  async run(client, message, args) {
+   const url = 'https://some-random-api.ml/animu/hug';
+
+   let response, data;
+   try {
+     response = await axios.get(url);
+     data = response.data;
+   } catch (e) {
+     return message.channel.send(`An error occured!`)
+   }
+
+   const embed = new MessageEmbed()
+     .setTitle(`@${message.author.username} hugs @${message.mentions.users.first() || message.mentions.members.first()}`)
+     .setImage(data.link)
+
+   await message.channel.send(embed)
+   }
+}
